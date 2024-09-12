@@ -15,8 +15,7 @@ class Articles extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'id', 'created_at','created_by', 'updated_at',
-        'updated_by','deleted_by','deleted_at'
+        'id','name','description','quantity','price', 'user_id','created_at', 'updated_at','deleted_at'
     ];
 
     /**

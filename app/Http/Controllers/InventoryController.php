@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Application\Inventory\UseCaseGetInventoryList;
 use App\Application\Inventory\UseCaseGetInventoryShow;
+use App\Application\Inventory\UseCaseSaveArticle;
 use App\Application\Inventory\UseCaseUpdateArticle;
+use App\Application\Inventory\UseCaseDeleteArticle;
 use App\DTOs\ArticleDTO;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +25,9 @@ class InventoryController extends Controller
     public function __construct(
         private readonly UseCaseGetInventoryList $inventory_list,
         private readonly UseCaseGetInventoryShow $inventory_show,
-        private readonly UseCaseUpdateArticle $inventory_update
+        private readonly UseCaseSaveArticle $inventory_save,
+        private readonly UseCaseUpdateArticle $inventory_update,
+        private readonly UseCaseDeleteArticle $inventory_delete
     ){}
 
     /**
@@ -38,40 +42,63 @@ class InventoryController extends Controller
     /**
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function create()
+    {
+        return view('inventory.create');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
     public function edit(Request $request, int $id)
     {
         $article = $this->inventory_show->__invoke($id);
         return view('inventory.edit', ['article' => $article]);
     }
 
+    public function save(Request $request):RedirectResponse
+    {
+        $articleDto = ArticleDTO::get(
+            null,
+            $request->input('name'),
+            $request->input('description'),
+            $request->input('quantity'),
+            $request->input('price'),
+            Auth::id(),
+            new DateTime(),
+            null,
+            null    
+        );
+
+        $this->inventory_save->__invoke($articleDto);
+        return redirect()->route('inventory.list');
+    }
+
   
-    /**
-     * Actualiza el libro especificado
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function update(Request $request):RedirectResponse
     {
-
-        Log::debug("alsdjl");
         $articleDto = ArticleDTO::get(
-            $request->integer('atc_id'),
-            $request->string('name'),
-            $request->string('description'),
-            $request->integer('quantity'),
-            $request->float('price'),
+            $request->input('atc_id'),
+            $request->input('name'),
+            $request->input('description'),
+            $request->input('quantity'),
+            $request->input('price'),
             Auth::id(),
             null,
             new DateTime(),
             null    
         );
         Log::debug(print_r($articleDto,true));
-        Log::debug("alsdj222l");
         $article = $this->inventory_update->__invoke($articleDto);
         $id = $article->get('id');
-        Log::debug("alsdj22w3332l");
 
-        return redirect()->route('inventory.edit', ['article' => $article]);
+        return redirect()->route('inventory.list');
+    }
+
+    public function delete(Request $request):RedirectResponse
+    {
+        $id = $request->input('id');
+        $this->inventory_delete->__invoke($id);
+        return redirect()->route('inventory.list');
     }
 }

@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form id='form_update' method="POST" action="{{ route('inventory.update') }}">
                         @csrf
-                        <input id="atc_id" type="hidden" value="{{$article->get('id')}}">
+                        <input name="atc_id" type="hidden" value="{{$article->get('id')}}">
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('messages.name') }}</label>
 
@@ -56,7 +56,7 @@
                             <label for="price" class="col-md-4 col-form-label text-md-end">{{ __('messages.price') }}</label>
 
                             <div class="col-md-6">
-                                <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ $article->get('price') }}" required>
+                                <input id="price" type="number" step=".01"class="form-control @error('price') is-invalid @enderror" name="price" value="{{ $article->get('price') }}" required>
 
                                 @error('price')
                                     <span class="invalid-feedback" role="alert">
@@ -81,42 +81,3 @@
     </div>
 </div>
 @endsection
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        
-        document.getElementById('form_update').addEventListener('submit', function(evt){
-        
-            evt.preventDefault();    
-
-            var id = document.getElementById('atc_id').value;
-            var name = document.getElementById('name').value;
-            var description = document.getElementById('description').value;
-            var quantity = document.getElementById('quantity').value;
-            var price = document.getElementById('price').value;
-            var token = document.getElementsByName('_token')[0].value;
-
-            fetch("/inventory/update", {
-                headers: {
-                    'X-CSRF-TOKEN': token// <--- aquí el token
-                },
-                method:"POST",
-                body: JSON.stringify({ 
-                    atc_id: id,
-                    name: name,
-                    description: description, 
-                    quantity: quantity, 
-                    price: price 
-                })
-            })
-            .then(r => r.json())
-            .then(respuesta => {
-            console.log(respuesta);
-});
-
-        });
-
-    }, false);
-
-    
-</script>
-

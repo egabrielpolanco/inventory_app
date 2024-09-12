@@ -10,6 +10,8 @@ use App\DTOs\ArticleDTO;
 interface IInventoryContract
 {
     public function getInventoryList(int $user_id):Collection;
-    public function getArticleById(int $user_id, int $id):IlluminateCollection;  
+    public function getArticleById(int $user_id, int $id):IlluminateCollection; 
+    public function saveArticle(ArticleDTO $articleDto):IlluminateCollection; 
     public function updateArticle(ArticleDTO $articleDto):IlluminateCollection;
+    public function deleteArticle(int $user_id, int $id):void;
 }

@@ -93,9 +93,13 @@
             var description = document.getElementById('description').value;
             var quantity = document.getElementById('quantity').value;
             var price = document.getElementById('price').value;
+            var token = document.getElementsByName('_token')[0].value;
 
             fetch("/inventory/update", {
-                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': token// <--- aquí el token
+                },
+                method:"POST",
                 body: JSON.stringify({ 
                     atc_id: id,
                     name: name,
@@ -103,9 +107,11 @@
                     quantity: quantity, 
                     price: price 
                 })
-            });
-
-            return false;
+            })
+            .then(r => r.json())
+            .then(respuesta => {
+            console.log(respuesta);
+});
 
         });
 

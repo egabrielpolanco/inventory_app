@@ -33,7 +33,7 @@ Ejecutar: npm run dev
 
 
 WINDOWS (Docker) <Recomendado>
-Tomando en cuenta que partimos desde este punto desde la raíz del proyecto:
+Tomando en cuenta que partimos desde este punto desde la raíz del proyecto:  
 
 Ejecutar: composer install  
 Ejecutar: bash en la raiz del proyecto  

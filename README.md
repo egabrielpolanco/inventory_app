@@ -32,7 +32,7 @@ Ejecutar: php artisan db:seed (opcional)
 Ejecutar: npm run dev  
 
 
-WINDOWS (Docker) <Recomendado>
+WINDOWS (Docker) <Recomendado>  
 Tomando en cuenta que partimos desde este punto desde la raíz del proyecto:  
 
 Ejecutar: composer install  
